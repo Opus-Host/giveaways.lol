@@ -9,12 +9,22 @@ const client = new Discord.Client({
     ]
 });
 
+
+console.log(`
+\x1b[38;2;143;110;250m ██████╗ ██╗██╗   ██╗███████╗ █████╗ ██╗    ██╗ █████╗ ██╗   ██╗███████╗
+\x1b[38;2;157;101;254m██╔════╝ ██║██║   ██║██╔════╝██╔══██╗██║    ██║██╔══██╗╚██╗ ██╔╝██╔════╝
+\x1b[38;2;172;90;255m██║  ███╗██║██║   ██║█████╗  ███████║██║ █╗ ██║███████║ ╚████╔╝ ███████╗
+\x1b[38;2;188;76;255m██║   ██║██║╚██╗ ██╔╝██╔══╝  ██╔══██║██║███╗██║██╔══██║  ╚██╔╝  ╚════██║
+\x1b[38;2;205;54;255m╚██████╔╝██║ ╚████╔╝ ███████╗██║  ██║╚███╔███╔╝██║  ██║   ██║   ███████║
+\x1b[38;2;222;0;255m ╚═════╝ ╚═╝  ╚═══╝  ╚══════╝╚═╝  ╚═╝ ╚══╝╚══╝ ╚═╝  ╚═╝   ╚═╝   ╚══════╝
+`);
+
 const config = require('./config.json');
 client.config = config;
 
 const synchronizeSlashCommands = require('discord-sync-commands');
 
-// Init discord giveaways
+
 const { GiveawaysManager } = require('discord-giveaways');
 client.giveawaysManager = new GiveawaysManager(client, {
     storage: "./giveaways.json",
@@ -30,7 +40,7 @@ client.giveawaysManager = new GiveawaysManager(client, {
         }
     }
 });
-// We now have a client.giveawaysManager property to manage our giveaways!
+
 
 client.giveawaysManager.on("giveawayReactionAdded", (giveaway, member, reaction) => {
     console.log(`${member.user.tag} entered giveaway #${giveaway.messageId} (${reaction.emoji.name})`);
@@ -44,7 +54,7 @@ client.giveawaysManager.on("giveawayEnded", (giveaway, winners) => {
     console.log(`Giveaway #${giveaway.messageId} ended! Winners: ${winners.map((member) => member.user.username).join(', ')}`);
 });
 
-/* Load all commands */
+
 client.commands = new Discord.Collection();
 fs.readdir("./commands/", (_err, files) => {
     files.forEach((file) => {
@@ -68,7 +78,7 @@ fs.readdir("./commands/", (_err, files) => {
     });
 });
 
-/* Load all events */
+
 fs.readdir("./events/", (_err, files) => {
     files.forEach((file) => {
         if (!file.endsWith(".js")) return;
@@ -80,5 +90,10 @@ fs.readdir("./events/", (_err, files) => {
     });
 });
 
-// Login
+
+client.on("ready", () => {
+    console.log(`✅ I am now online... (${client.user.tag})`);
+});
+
+
 client.login(config.token);
